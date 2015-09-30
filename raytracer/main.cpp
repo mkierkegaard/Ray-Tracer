@@ -25,8 +25,9 @@ int main(void)
 {
 
 	// Checking checking...
-
+	//houston plz
 	writeImage();
+	dbzdf
 	
   return EXIT_SUCCESS;
 }
