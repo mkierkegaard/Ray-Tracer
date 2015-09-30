@@ -26,6 +26,7 @@ int main(void)
 
 	// Checking checking...
 	//houston plz
+	//plzzzzzzzzzzz
 	writeImage();
 	
 	
