@@ -24,6 +24,8 @@ void writeImage() {
 int main(void)
 {
 
+	// Checking checking...
+
 	writeImage();
 	
   return EXIT_SUCCESS;
