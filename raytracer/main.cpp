@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "Sphere.h"
+#include <glm/vec3.hpp>
 
 
 const int dimx = 800, dimy = 800;
@@ -32,7 +33,7 @@ void writeImage() {
  
 int main(void)
 {
-	Sphere sphere = Sphere();
+	Sphere sphere = Sphere(glm::vec3(0.0, -10004, -20), 10000, glm::vec3(0.20, 0.20, 0.20));
 	// Checking checking...
 	//houston plz
 	//plzzzzzzzzzzz
