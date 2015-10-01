@@ -32,7 +32,7 @@ void writeImage() {
  
 int main(void)
 {
-	Sphere sphere = Sphere();
+	Sphere sphere = Sphere(glm::vec3(0,1, 2), 2, glm::vec3(20, 20, 20));
 	// Checking checking...
 	//houston plz
 	//plzzzzzzzzzzz
