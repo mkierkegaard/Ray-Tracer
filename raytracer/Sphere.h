@@ -11,5 +11,7 @@ public:
 	Sphere();
 	Sphere(glm::vec3 pos, float rad, glm::vec3 col);
 	~Sphere();
+
+	
 };
 
