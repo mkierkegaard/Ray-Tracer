@@ -3,7 +3,13 @@
 #include "Sphere.h"
 #include "Ray.h"
 
-
+#if defined __linux__ || defined __APPLE__
+// "Compiled for Linux
+#else
+// Windows doesn't define these values by default, Linux does
+#define M_PI 3.141592653589793
+#define INFINITY 1e8
+#endif
 const int dimx = 800, dimy = 800;
 
 void render() {
@@ -50,7 +56,7 @@ int main(void)
 	// Checking checking...
 	//houston plz
 	//plzzzzzzzzzzz
-	writeImage();
+	render();
 	
   return EXIT_SUCCESS;
 }
