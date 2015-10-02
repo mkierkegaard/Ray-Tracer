@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "Sphere.h"
+#include "Ray.h"
 
 
 const int dimx = 800, dimy = 800;
@@ -19,6 +20,9 @@ void writeImage() {
 	{
 		for (i = 0; i < dimx; ++i)
 		{
+
+			Ray ray = Ray(glm::vec3(0, 1, 2), glm::vec3(20, 20, 20));
+
 			img[j][i] = i*j;
 			static unsigned char color[3];
 			color[0] = i % 256;  /* red */
@@ -32,12 +36,11 @@ void writeImage() {
  
 int main(void)
 {
-	Sphere sphere = Sphere(glm::vec3(0,1, 2), 2, glm::vec3(20, 20, 20));
+	Sphere sphere = Sphere(glm::vec3(0, 1, 2), 2, glm::vec3(20, 20, 20));
 	// Checking checking...
 	//houston plz
 	//plzzzzzzzzzzz
 	writeImage();
-	
 	
   return EXIT_SUCCESS;
 }
