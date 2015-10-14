@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <vector> 
 #include "Sphere.h"
 #include "Ray.h"
 
@@ -12,39 +13,20 @@
 #endif
 const int dimx = 800, dimy = 800;
 
-void render() {
-	for (int i = 0; i < dimx; i++) {
-		for (int j = 0; j < dimy; i++) {
-			Ray primray;
-			computeRaydir(i, j, &primray);
-			glm::vec3 pHit;
-			glm::vec3 nHit;
-			float minDistance = INFINITY;
-			Sphere sphere = NULL;
-			for (int k = 0; k < spheres.size(); k++) {
-				if (intersect(sphere[k], primray, &pHit, &nHit)) {
-					float distance = Distance(eyePosition, pHit);
-					if (distance < minDistance) {
-						sphere = spheres[k];
-						minDistance = distance;
-					}
-				}
-			}
-			if (sphere != NULL) {
-				Ray shadowray;
-				shadowray.direction = LightPosition - pHit;
-				bool IsShadow = false;
-				for (int k = 0; k < spheres.size(); k++) {
-					if (intersect(sphere[k], shadowray)) {
-						isInShadow = true;
-						break;
-					}
-				}
-			}
-			if (!isInShadow)
-				pixels[i][j] = sphere->color * light.brightness;
-			else
-				pixels[i][j] = 0;
+glm::vec3 trace(glm::vec3 &rayorgin, glm::vec3 &raydir, const std::vector<Sphere> spheres) {
+
+}
+
+void render(const std::vector<Sphere> &spheres) {
+	
+	glm::vec3 *image = new glm::vec3[dimx * dimy], *pixel = image;
+	for (unsigned x = 0; x < dimy; x++) {
+		for (unsigned y = 0; y < dimx; y++) {
+			float xx = x;
+			float yy = y;
+			glm::vec3 raydir(xx, yy, -1);
+			*pixel = trace(glm::vec3(), raydir, spheres);
+
 		}
 	}
 
@@ -52,11 +34,11 @@ void render() {
  
 int main(void)
 {
-	Sphere sphere = Sphere(glm::vec3(0, 1, 2), 2, glm::vec3(20, 20, 20));
-	// Checking checking...
-	//houston plz
-	//plzzzzzzzzzzz
-	render();
+	std::vector<Sphere> spheres;
+	spheres.push_back(Sphere(glm::vec3(0, 1, 2), 2, glm::vec3(20, 20, 20)));
+
+	
+	render(spheres);
 	
   return EXIT_SUCCESS;
 }
