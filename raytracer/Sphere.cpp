@@ -25,8 +25,8 @@ bool Sphere::intersect(const glm::vec3 &rayorigin, const glm::vec3 &raydir, floa
 	float tca = glm::dot(l, raydir);
 	if (tca < 0) return false;
 	float d2 = glm::dot(l, l) - tca * tca;
-	if (d2 > this->radius*this->radius) return false;
-	float thc = sqrt(this->radius*this->radius - d2);
+	if (d2 > (this->radius*this->radius)) return false;
+	float thc = sqrt((this->radius*this->radius) - d2);
 	t0 = tca - thc;
 	t1 = tca + thc;
 

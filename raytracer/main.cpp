@@ -10,6 +10,7 @@
 #include <vector> 
 #include "Sphere.h"
 #include "Ray.h"
+#include <glm/ext.hpp>
 
 #if defined __linux__ || defined __APPLE__
 // "Compiled for Linux
@@ -23,34 +24,64 @@ const int dimx = 800, dimy = 800;
 
 glm::vec3 trace(glm::vec3 &rayorgin, glm::vec3 &raydir, const std::vector<Sphere> &spheres) {
 
+	float tnear = INFINITY;
+	const Sphere* sphere = NULL;
+
 	for (unsigned i = 0; i < spheres.size(); i++) {
 		float t0 = INFINITY, t1 = INFINITY;
 		if (spheres[i].intersect(rayorgin, raydir, t0, t1)) {
-			return glm::vec3(1, 0, 0);
-		}
-		else {
-			return glm::vec3(0, 0, 0);
+			if (t0 < 0) t0 = t1;
+			if (t0 < tnear) {
+				tnear = t0;
+				sphere = &spheres[i];
+			}
 		}
 	}
+	if (!sphere) return glm::vec3(0, 0, 0);
 
+
+	else return glm::vec3(1, 0, 0);
 }
 
 void render(const std::vector<Sphere> &spheres) {
 	
 	glm::vec3 *image = new glm::vec3[dimx * dimy], *pixel = image;
 
-	float invWidth = 1 / dimx;
-	float invHeight = 1 / dimy;
+	float invWidth = 1 / float(dimx), invHeight = 1 / float(dimy);
+	float fov = 30, aspectratio = dimx / float(dimy);
+	float angle = tan(M_PI * 0.5 * fov / 180.);
 
-	for (unsigned x = 0; x < dimx; x++) {
-		for (unsigned y = 0; y < dimy; y++, pixel++) {
-			float xx = (2 * ((x + 0.5) * invWidth) - 1);
-			float yy = (1 - 2*((y + 0.5) * invHeight));
+	glm::mat4 projectionMatrix = glm::perspective(float(30), float(dimx) / float(dimy), float(0.1), 100.f);
+	glm::mat4 view = glm::lookAt(glm::vec3(0, 0, 1), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+
+	glm::mat4 viewprojection = projectionMatrix * view;
+	glm::mat4 viewprojectioninv = glm::inverse(viewprojection);
 
 
+	for (unsigned y = 0; y < dimy; y++) {
+		for (unsigned x = 0; x < dimx; x++, pixel++) {
+			float xx = (2 * ((x + 0.5) * invWidth) - 1) * angle * aspectratio;
+			float yy = (1 - 2*((y + 0.5) * invHeight))*angle;
 
-			glm::vec3 raydir(xx, yy, -1);
-			*pixel = trace(glm::vec3(0,0,0), raydir, spheres);
+			glm::vec3 nearPlanePoint = (glm::vec3(float(x) / dimx, float(y) / dimy, 0) - glm::vec3(0.5, 0.5, 0.5)) * 2.0f;
+			glm::vec3 farPlanePoint = (glm::vec3(float(x) / dimx, float(y) / dimy, 1) - glm::vec3(0.5, 0.5, 0.5)) * 2.0f;
+
+			glm::vec4 nearPlanePointWorldSpace = viewprojectioninv * glm::vec4(nearPlanePoint, 1.0f);
+			glm::vec4 farPlanePointWorldSpace4 = viewprojectioninv * glm::vec4(farPlanePoint, 1.0f);
+
+			//GLM unproject för projection
+			
+			//glm::vec3 origin = glm::vec3(viewprojectioninv * glm::vec4((glm::vec3(float(x) / 800, float(y) / 800, 0) - glm::vec3(0.5, 0.5, 0)) * 2.0f, 1.0f));
+								
+			//glm::vec3 direction = glm::normalize(glm::vec3(viewprojectioninv * glm::vec4(glm::vec3(0,0,-1), 0)));
+
+			glm::vec3 origin = nearPlanePointWorldSpace;
+			glm::vec3 direction = glm::normalize(farPlanePointWorldSpace - nearPlanePointWorldSpace);
+
+			//glm::vec3 raydir(x, y, -1);
+			//glm::normalize(raydir);
+
+			*pixel = trace(origin, direction, spheres);
 
 		}
 	}
@@ -69,8 +100,8 @@ void render(const std::vector<Sphere> &spheres) {
 int main(void)
 {
 	std::vector<Sphere> spheres;
-	spheres.push_back(Sphere(glm::vec3(0, 0, -20), 0, glm::vec3(20, 20, 20)));
-
+	//spheres.push_back(Sphere(glm::vec3(0, 0, -2), 0.5, glm::vec3(20, 20, 20)));
+	spheres.push_back(Sphere(glm::vec3(0.5, 0.5, -5), 0.2, glm::vec3(20, 20, 20)));
 	
 	render(spheres);
 	
