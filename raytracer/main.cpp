@@ -9,6 +9,7 @@
 #include <cmath>
 #include <vector> 
 #include "Sphere.h"
+#include "Plane.h"
 #include "Ray.h"
 #include <glm/ext.hpp>
 
@@ -109,6 +110,15 @@ int main(void)
 	spheres.push_back(Sphere(glm::vec3(1, 1, -5), 0.5, glm::vec3(20, 20, 20)));
 	spheres.push_back(Sphere(glm::vec3(5, 5, -5), 0.5, glm::vec3(20, 20, 20)));
 	render(spheres);
+
+	std::vector<Plane> planes;
 	
+	planes.push_back(Plane(glm::vec3(-2, -2, 0), glm::vec3(2, -2, 0), glm::vec3(2, -2, -2), glm::vec3(-2, -2, 0), glm::vec3(1, 1, 1)));
+	//planes.push_back(Plane(glm::vec3(0, 0, -2), glm::vec3(0, 0, -2), glm::vec3(0, 0, -2), glm::vec3(0, 0, -2), glm::vec3(0, 0, -2));
+	//planes.push_back(Plane(glm::vec3(0, 0, -2), glm::vec3(0, 0, -2), glm::vec3(0, 0, -2), glm::vec3(0, 0, -2), glm::vec3(0, 0, -2));
+	//planes.push_back(Plane(glm::vec3(0, 0, -2), glm::vec3(0, 0, -2), glm::vec3(0, 0, -2), glm::vec3(0, 0, -2), glm::vec3(0, 0, -2));
+	//planes.push_back(Plane(glm::vec3(0, 0, -2), glm::vec3(0, 0, -2), glm::vec3(0, 0, -2), glm::vec3(0, 0, -2), glm::vec3(0, 0, -2));
+	
+
   return EXIT_SUCCESS;
 }
