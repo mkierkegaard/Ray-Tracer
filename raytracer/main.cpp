@@ -41,7 +41,7 @@ glm::vec3 trace(glm::vec3 &rayorgin, glm::vec3 &raydir, const std::vector<Sphere
 	if (!sphere) return glm::vec3(0, 0, 0);
 
 
-	else return glm::vec3(1, 0, 0);
+	else return sphere->color;
 }
 
 void render(const std::vector<Sphere> &spheres) {
@@ -106,9 +106,9 @@ void render(const std::vector<Sphere> &spheres) {
 int main(void)
 {
 	std::vector<Sphere> spheres;
-	spheres.push_back(Sphere(glm::vec3(0, 0, -2), 0.5, glm::vec3(20, 20, 20)));
-	spheres.push_back(Sphere(glm::vec3(1, 1, -5), 0.5, glm::vec3(20, 20, 20)));
-	spheres.push_back(Sphere(glm::vec3(5, 5, -5), 0.5, glm::vec3(20, 20, 20)));
+	spheres.push_back(Sphere(glm::vec3(0, 0, -2), 0.5, glm::vec3(0.5, 0.5, 0.95)));
+	spheres.push_back(Sphere(glm::vec3(1, 1, -5), 0.5, glm::vec3(0.1, 0.3, 0.1)));
+	spheres.push_back(Sphere(glm::vec3(5, 5, -5), 0.5, glm::vec3(0.7, 0.4, 0.5)));
 	render(spheres);
 
 	std::vector<Plane> planes;
