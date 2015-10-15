@@ -74,9 +74,11 @@ void render(const std::vector<Sphere> &spheres) {
 			//glm::vec3 origin = glm::vec3(viewprojectioninv * glm::vec4((glm::vec3(float(x) / 800, float(y) / 800, 0) - glm::vec3(0.5, 0.5, 0)) * 2.0f, 1.0f));
 								
 			//glm::vec3 direction = glm::normalize(glm::vec3(viewprojectioninv * glm::vec4(glm::vec3(0,0,-1), 0)));
+			float nearh = nearPlanePointWorldSpace.w;
+			float farh = farPlanePointWorldSpace4.w;
 
-			glm::vec3 origin = nearPlanePointWorldSpace;
-			glm::vec3 direction = glm::normalize(farPlanePointWorldSpace - nearPlanePointWorldSpace);
+			glm::vec3 origin = glm::vec3(nearPlanePointWorldSpace)*nearh;
+			glm::vec3 direction = glm::normalize(glm::vec3(farPlanePointWorldSpace4 - nearPlanePointWorldSpace)*farh);
 
 			//glm::vec3 raydir(x, y, -1);
 			//glm::normalize(raydir);
@@ -100,8 +102,8 @@ void render(const std::vector<Sphere> &spheres) {
 int main(void)
 {
 	std::vector<Sphere> spheres;
-	//spheres.push_back(Sphere(glm::vec3(0, 0, -2), 0.5, glm::vec3(20, 20, 20)));
-	spheres.push_back(Sphere(glm::vec3(0.5, 0.5, -5), 0.2, glm::vec3(20, 20, 20)));
+	spheres.push_back(Sphere(glm::vec3(0, 0, -2), 0.5, glm::vec3(20, 20, 20)));
+	spheres.push_back(Sphere(glm::vec3(1, 1, -5), 0.5, glm::vec3(20, 20, 20)));
 	
 	render(spheres);
 	
