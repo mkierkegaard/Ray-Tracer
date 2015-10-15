@@ -19,7 +19,7 @@
 #define M_PI 3.141592653589793
 #define INFINITY 1e8
 #endif
-const int dimx = 800, dimy = 800;
+const int dimx = 640, dimy = 480;
 
 
 glm::vec3 trace(glm::vec3 &rayorgin, glm::vec3 &raydir, const std::vector<Sphere> &spheres) {
@@ -47,38 +47,41 @@ void render(const std::vector<Sphere> &spheres) {
 	
 	glm::vec3 *image = new glm::vec3[dimx * dimy], *pixel = image;
 
-	float invWidth = 1 / float(dimx), invHeight = 1 / float(dimy);
-	float fov = 30, aspectratio = dimx / float(dimy);
-	float angle = tan(M_PI * 0.5 * fov / 180.);
+	//float invWidth = 1 / float(dimx), invHeight = 1 / float(dimy);
+	//float fov = 30, aspectratio = dimx / float(dimy);
+	//float angle = tan(M_PI * 0.5 * fov / 180.);
 
 	glm::mat4 projectionMatrix = glm::perspective(float(30), float(dimx) / float(dimy), float(0.1), 100.f);
 	glm::mat4 view = glm::lookAt(glm::vec3(0, 0, 1), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 
-	glm::mat4 viewprojection = projectionMatrix * view;
+	glm::mat4 viewprojection = view * projectionMatrix;// *view;
 	glm::mat4 viewprojectioninv = glm::inverse(viewprojection);
 
 
 	for (unsigned y = 0; y < dimy; y++) {
-		for (unsigned x = 0; x < dimx; x++, pixel++) {
-			float xx = (2 * ((x + 0.5) * invWidth) - 1) * angle * aspectratio;
-			float yy = (1 - 2*((y + 0.5) * invHeight))*angle;
+		for (unsigned x = dimx; x > 0; x--, pixel++) {
+			//float xx = (2 * ((x + 0.5) * invWidth) - 1) * angle * aspectratio;
+			//float yy = (1 - 2*((y + 0.5) * invHeight))*angle;
 
-			glm::vec3 nearPlanePoint = (glm::vec3(float(x) / dimx, float(y) / dimy, 0) - glm::vec3(0.5, 0.5, 0.5)) * 2.0f;
-			glm::vec3 farPlanePoint = (glm::vec3(float(x) / dimx, float(y) / dimy, 1) - glm::vec3(0.5, 0.5, 0.5)) * 2.0f;
+			glm::vec3 to = glm::unProject(glm::vec3(x, y, 1), view, projectionMatrix, glm::vec4(0, 0, dimx, dimy));
+			glm::vec3 from = glm::unProject(glm::vec3(x, y, -1), view, projectionMatrix, glm::vec4(0, 0, dimx, dimy));
 
-			glm::vec4 nearPlanePointWorldSpace = viewprojectioninv * glm::vec4(nearPlanePoint, 1.0f);
-			glm::vec4 farPlanePointWorldSpace4 = viewprojectioninv * glm::vec4(farPlanePoint, 1.0f);
+			//glm::vec3 nearPlanePoint = (glm::vec3((float(x) / dimx) - 0.5f, (float(y) / dimy) -0.5f, 0.5f) * 2.f); //- glm::vec3(0.5, 0.5, 0.5)) * 2.0f;
+			//glm::vec3 farPlanePoint = (glm::vec3((float(x) / dimx) - 0.5f, (float(y) / dimy) - 0.5f, -0.5f) * 2.f); //- glm::vec3(0.5, 0.5, 0.5)) * 2.0f;
+
+			//glm::vec4 nearPlanePointWorldSpace = viewprojectioninv * glm::vec4(nearPlanePoint, 1.0f);
+			//glm::vec4 farPlanePointWorldSpace4 = viewprojectioninv * glm::vec4(farPlanePoint, 1.0f);
 
 			//GLM unproject för projection
 			
 			//glm::vec3 origin = glm::vec3(viewprojectioninv * glm::vec4((glm::vec3(float(x) / 800, float(y) / 800, 0) - glm::vec3(0.5, 0.5, 0)) * 2.0f, 1.0f));
 								
 			//glm::vec3 direction = glm::normalize(glm::vec3(viewprojectioninv * glm::vec4(glm::vec3(0,0,-1), 0)));
-			float nearh = nearPlanePointWorldSpace.w;
-			float farh = farPlanePointWorldSpace4.w;
+			//float nearh = nearPlanePointWorldSpace.w;
+			//float farh = farPlanePointWorldSpace4.w;
 
-			glm::vec3 origin = glm::vec3(nearPlanePointWorldSpace)*nearh;
-			glm::vec3 direction = glm::normalize(glm::vec3(farPlanePointWorldSpace4 - nearPlanePointWorldSpace)*farh);
+			glm::vec3 origin = from; //glm::vec3(nearPlanePointWorldSpace)*nearh;
+			glm::vec3 direction = glm::normalize(to - from);//glm::normalize(glm::vec3(farPlanePointWorldSpace4)*farh - glm::vec3(nearPlanePointWorldSpace)*nearh);
 
 			//glm::vec3 raydir(x, y, -1);
 			//glm::normalize(raydir);
@@ -104,7 +107,7 @@ int main(void)
 	std::vector<Sphere> spheres;
 	spheres.push_back(Sphere(glm::vec3(0, 0, -2), 0.5, glm::vec3(20, 20, 20)));
 	spheres.push_back(Sphere(glm::vec3(1, 1, -5), 0.5, glm::vec3(20, 20, 20)));
-	
+	spheres.push_back(Sphere(glm::vec3(5, 5, -5), 0.5, glm::vec3(20, 20, 20)));
 	render(spheres);
 	
   return EXIT_SUCCESS;
