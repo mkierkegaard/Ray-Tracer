@@ -11,6 +11,8 @@
 #include "Sphere.h"
 #include "Plane.h"
 #include "Ray.h"
+#include "World.h"
+#include "Object.h"
 #include <glm/ext.hpp>
 
 #if defined __linux__ || defined __APPLE__
@@ -23,7 +25,7 @@
 const int dimx = 640, dimy = 480;
 
 
-glm::vec3 trace(glm::vec3 &rayorgin, glm::vec3 &raydir, const std::vector<Sphere> &spheres) {
+/*glm::vec3 trace(glm::vec3 &rayorgin, glm::vec3 &raydir, const std::vector<Sphere> &spheres) {
 
 	float tnear = INFINITY;
 	const Sphere* sphere = NULL;
@@ -46,7 +48,7 @@ glm::vec3 trace(glm::vec3 &rayorgin, glm::vec3 &raydir, const std::vector<Sphere
 
 void render(const std::vector<Sphere> &spheres) {
 	
-	glm::vec3 *image = new glm::vec3[dimx * dimy], *pixel = image;
+	glm::vec3 *image = new glm::vec3[dimx * dimy], *pixel = image; 
 
 	//float invWidth = 1 / float(dimx), invHeight = 1 / float(dimy);
 	//float fov = 30, aspectratio = dimx / float(dimy);
@@ -101,19 +103,25 @@ void render(const std::vector<Sphere> &spheres) {
 	ofs.close();
 	delete[] image;
 
-}
+}*/
  
 int main(void)
 {
-	std::vector<Sphere> spheres;
-	spheres.push_back(Sphere(glm::vec3(0, 0, -2), 0.5, glm::vec3(0.5, 0.5, 0.95)));
-	spheres.push_back(Sphere(glm::vec3(1, 1, -5), 0.5, glm::vec3(0.1, 0.3, 0.1)));
-	spheres.push_back(Sphere(glm::vec3(5, 5, -5), 0.5, glm::vec3(0.7, 0.4, 0.5)));
-	render(spheres);
+	World world;
+	Object* objectToAdd;
+	objectToAdd = new Sphere(glm::vec3(0, 0, -2), 0.5, glm::vec3(0.5, 0.5, 0.95));
 
-	std::vector<Plane> planes;
+	world.objects.push_back(objectToAdd);
 	
-	planes.push_back(Plane(glm::vec3(-2, -2, 0), glm::vec3(2, -2, 0), glm::vec3(2, -2, -2), glm::vec3(-2, -2, 0), glm::vec3(1, 1, 1)));
+	//std::vector<Sphere> spheres;
+	//spheres.push_back(Sphere(glm::vec3(0, 0, -2), 0.5, glm::vec3(0.5, 0.5, 0.95)));
+	//spheres.push_back(Sphere(glm::vec3(1, 1, -5), 0.5, glm::vec3(0.1, 0.3, 0.1)));
+	//spheres.push_back(Sphere(glm::vec3(5, 5, -5), 0.5, glm::vec3(0.7, 0.4, 0.5)));
+	//render(spheres);
+
+	//std::vector<Plane> planes;
+	
+	//planes.push_back(Plane(glm::vec3(-2, -2, 0), glm::vec3(2, -2, 0), glm::vec3(2, -2, -2), glm::vec3(-2, -2, 0), glm::vec3(1, 1, 1)));
 	//planes.push_back(Plane(glm::vec3(0, 0, -2), glm::vec3(0, 0, -2), glm::vec3(0, 0, -2), glm::vec3(0, 0, -2), glm::vec3(0, 0, -2));
 	//planes.push_back(Plane(glm::vec3(0, 0, -2), glm::vec3(0, 0, -2), glm::vec3(0, 0, -2), glm::vec3(0, 0, -2), glm::vec3(0, 0, -2));
 	//planes.push_back(Plane(glm::vec3(0, 0, -2), glm::vec3(0, 0, -2), glm::vec3(0, 0, -2), glm::vec3(0, 0, -2), glm::vec3(0, 0, -2));

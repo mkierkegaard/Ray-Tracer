@@ -1,18 +1,13 @@
 #include "Plane.h"
+#include "Object.h"
 
 
 
-Plane::Plane()
-{
-}
-
-
-Plane::Plane(glm::vec3 V1, glm::vec3 V2, glm::vec3 V3, glm::vec3, glm::vec3 color)
+Plane::Plane(glm::vec3 V1, glm::vec3 V2, glm::vec3 V3, glm::vec3 col) : Object (col)
 {
 	vertices1 = V1;
 	vertices2 = V2;
 	vertices3 = V3;
-	col = color;
 }
 
 bool Plane::intersect(const glm::vec3 &rayorigin, const glm::vec3 &raydir, float &t0, float &t1)
