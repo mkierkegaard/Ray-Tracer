@@ -7,13 +7,16 @@
 #include <cassert> 
 #include <algorithm>
 #include <cmath>
-#include <vector> 
+#include <vector>
+#include <iostream>
 #include "Sphere.h"
 #include "Plane.h"
 #include "Ray.h"
 #include "World.h"
 #include "Object.h"
 #include <glm/ext.hpp>
+
+using namespace std;
 
 #if defined __linux__ || defined __APPLE__
 // "Compiled for Linux
@@ -25,28 +28,28 @@
 const int dimx = 640, dimy = 480;
 
 
-/*glm::vec3 trace(glm::vec3 &rayorgin, glm::vec3 &raydir, const std::vector<Sphere> &spheres) {
+glm::vec3 trace(glm::vec3 &rayorgin, glm::vec3 &raydir, std::vector<Object*> &objects) {
 
 	float tnear = INFINITY;
-	const Sphere* sphere = NULL;
+	const Object* object = NULL;
 
-	for (unsigned i = 0; i < spheres.size(); i++) {
+	for (unsigned i = 0; i < objects.size(); i++) {
 		float t0 = INFINITY, t1 = INFINITY;
-		if (spheres[i].intersect(rayorgin, raydir, t0, t1)) {
-			if (t0 < 0) t0 = t1;
+		if (objects[i]->intersect(rayorgin, raydir, t0, t1)) {
+			//if (t0 < 0) t0 = t1;
 			if (t0 < tnear) {
 				tnear = t0;
-				sphere = &spheres[i];
+				object = objects[i];
 			}
 		}
 	}
-	if (!sphere) return glm::vec3(0, 0, 0);
+	if (!object) return glm::vec3(0, 0, 0);
 
 
-	else return sphere->color;
+	else return object->color;
 }
 
-void render(const std::vector<Sphere> &spheres) {
+void render(std::vector<Object*> &objects) {
 	
 	glm::vec3 *image = new glm::vec3[dimx * dimy], *pixel = image; 
 
@@ -89,10 +92,11 @@ void render(const std::vector<Sphere> &spheres) {
 			//glm::vec3 raydir(x, y, -1);
 			//glm::normalize(raydir);
 
-			*pixel = trace(origin, direction, spheres);
+			*pixel = trace(origin, direction, objects);
 
 		}
 	}
+
 	std::ofstream ofs("./untitled.ppm", std::ios::out | std::ios::binary);
 	ofs << "P6\n" << dimx << " " << dimy << "\n255\n";
 	for (unsigned i = 0; i < dimx * dimy; ++i) {
@@ -103,30 +107,40 @@ void render(const std::vector<Sphere> &spheres) {
 	ofs.close();
 	delete[] image;
 
-}*/
+}
  
 int main(void)
 {
+
 	World world;
-	Object* objectToAdd;
-	objectToAdd = new Sphere(glm::vec3(0, 0, -2), 0.5, glm::vec3(0.5, 0.5, 0.95));
+	Object* o;
 
-	world.objects.push_back(objectToAdd);
-	
-	//std::vector<Sphere> spheres;
-	//spheres.push_back(Sphere(glm::vec3(0, 0, -2), 0.5, glm::vec3(0.5, 0.5, 0.95)));
-	//spheres.push_back(Sphere(glm::vec3(1, 1, -5), 0.5, glm::vec3(0.1, 0.3, 0.1)));
-	//spheres.push_back(Sphere(glm::vec3(5, 5, -5), 0.5, glm::vec3(0.7, 0.4, 0.5)));
-	//render(spheres);
+	o = new Sphere(glm::vec3(0, 0, -2), 0.5, glm::vec3(0.5, 0.5, 0.95));
+	world.addObject(*o);
 
-	//std::vector<Plane> planes;
-	
-	//planes.push_back(Plane(glm::vec3(-2, -2, 0), glm::vec3(2, -2, 0), glm::vec3(2, -2, -2), glm::vec3(-2, -2, 0), glm::vec3(1, 1, 1)));
-	//planes.push_back(Plane(glm::vec3(0, 0, -2), glm::vec3(0, 0, -2), glm::vec3(0, 0, -2), glm::vec3(0, 0, -2), glm::vec3(0, 0, -2));
-	//planes.push_back(Plane(glm::vec3(0, 0, -2), glm::vec3(0, 0, -2), glm::vec3(0, 0, -2), glm::vec3(0, 0, -2), glm::vec3(0, 0, -2));
-	//planes.push_back(Plane(glm::vec3(0, 0, -2), glm::vec3(0, 0, -2), glm::vec3(0, 0, -2), glm::vec3(0, 0, -2), glm::vec3(0, 0, -2));
-	//planes.push_back(Plane(glm::vec3(0, 0, -2), glm::vec3(0, 0, -2), glm::vec3(0, 0, -2), glm::vec3(0, 0, -2), glm::vec3(0, 0, -2));
-	
+	o = new Sphere(glm::vec3(1, 1, -5), 0.5, glm::vec3(0.1, 0.3, 0.1));
+	world.addObject(*o);
+
+	o = new Sphere(glm::vec3(5, 5, -5), 0.5, glm::vec3(0.7, 0.4, 0.5));
+	world.addObject(*o);
+
+	o = new Plane(glm::vec3(0.0, 0.0, -1.0), glm::vec3(0.2, 0.2, 0.2), glm::vec3(0.0, 0.0, -20));
+	world.addObject(*o);
+
+	o = new Plane(glm::vec3(0.0, -1.0, 0.0), glm::vec3(0.5, 0.5, 0.5), glm::vec3(0.0, -6, 0.0));
+	world.addObject(*o);
+
+	o = new Plane(glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.8, 0.0, 0.0), glm::vec3(0.0, 6, 0.0));
+	world.addObject(*o);
+
+	o = new Plane(glm::vec3(1.0, 0.0, 0.0), glm::vec3(0.15, 0.8, 0.0), glm::vec3(6, 0.0, 0.0));
+	world.addObject(*o);
+
+	o = new Plane(glm::vec3(-1.0, 0.0, 0.0), glm::vec3(0.6, 0.6, 0.2), glm::vec3(-6, 0.0, 0.0));
+	world.addObject(*o);
+
+	render(world.objects);
+
 
   return EXIT_SUCCESS;
 }

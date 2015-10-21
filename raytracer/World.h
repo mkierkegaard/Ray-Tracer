@@ -9,11 +9,13 @@ class World
 {
 public:
 	// c-tors and d-tors
-	World() {};
+	World();
 	~World();
 
 	// public methods
-	void addObject(Object* o);
 
 	std::vector<Object*> objects;
+
+	void World::addObject(Object& o);
+
 };

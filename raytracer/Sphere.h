@@ -16,12 +16,27 @@ protected:
 	
 
 public:
-	Sphere::Sphere();
 	Sphere::Sphere(glm::vec3 pos, float rad, glm::vec3 col);
 	Sphere::~Sphere();
 	float radius;
 	glm::vec3 position;
-	bool Sphere::intersect(const glm::vec3 &rayorigin, const glm::vec3 &raydir, float &t0, float &t1) const;
+
+	bool intersect(const glm::vec3 &rayorigin, const glm::vec3 &raydir, float &t0, float &t1) {
+
+		glm::vec3 l = this->position - rayorigin;
+		float tca = glm::dot(l, raydir);
+		if (tca < 0) return false;
+		float d2 = glm::dot(l, l) - tca * tca;
+		if (d2 > (this->radius*this->radius)) return false;
+		float thc = sqrt((this->radius*this->radius) - d2);
+		t0 = tca +- thc;
+		//t1 = tca + thc;
+
+		cout << "Intersects with sphere" << endl;
+
+		return true;
+	}
+
 };
 
 #endif
