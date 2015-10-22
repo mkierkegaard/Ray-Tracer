@@ -3,9 +3,8 @@
 
 
 
-Plane::Plane(glm::vec3 n, glm::vec3 c, glm::vec3 p) {
+Plane::Plane(glm::vec3 n, glm::vec3 col, glm::vec3 p) : Object (col) {
 	normal = glm::normalize(n);
-	color = c;
 	point = p;
 }
 

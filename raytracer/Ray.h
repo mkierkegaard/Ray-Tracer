@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <glm/vec3.hpp>
+#include "World.h"
 
 class Ray
 {
@@ -9,8 +10,10 @@ private:
 	glm::vec3 direction;
 
 public:
-	Ray::Ray();
+	Ray::Ray(World w);
 	Ray::Ray(glm::vec3 orig, glm::vec3 dir);
 	Ray::~Ray();
+	World world;
+	glm::vec3 Ray::trace(glm::vec3 &rayorgin, glm::vec3 &raydir, std::vector<Object*> &objects);
 };
 

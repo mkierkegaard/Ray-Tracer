@@ -16,6 +16,11 @@ public:
 
 	std::vector<Object*> objects;
 
+	//std::vector<Light*> lights;
+
 	void World::addObject(Object& o);
 
+	glm::vec3 lightpos = glm::vec3(0.0, 4.0, -1.5);
+
+	//void World::addLight(Light& l);
 };
