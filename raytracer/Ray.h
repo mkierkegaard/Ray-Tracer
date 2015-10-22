@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <algorithm>
 #include <glm/vec3.hpp>
 #include "World.h"
 

@@ -11,7 +11,7 @@
 class Plane : public Object
 {
 public:
-	Plane(glm::vec3 n, glm::vec3 p, glm::vec3 color);
+	Plane(glm::vec3 n, glm::vec3 p, glm::vec3 color, glm::vec3 emcol);
 	glm::vec3 normal, point;
 	~Plane();
 

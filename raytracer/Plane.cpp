@@ -3,7 +3,7 @@
 
 
 
-Plane::Plane(glm::vec3 n, glm::vec3 col, glm::vec3 p) : Object (col) {
+Plane::Plane(glm::vec3 n, glm::vec3 col, glm::vec3 p, glm::vec3 emcol) : Object (col, emcol) {
 	normal = glm::normalize(n);
 	point = p;
 }

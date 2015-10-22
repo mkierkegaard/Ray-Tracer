@@ -13,8 +13,9 @@ class Object
 public:
 
 	Object();
-	Object(glm::vec3 color);
+	Object(glm::vec3 color, glm::vec3 emcolor);
 	glm::vec3 color;
+	glm::vec3 emissionColor;
 	virtual bool intersect(const glm::vec3 &rayorigin, const glm::vec3 &raydir, float &t0, float &t1) = 0;
 protected:
 

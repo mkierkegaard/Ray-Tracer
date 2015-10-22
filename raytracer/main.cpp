@@ -139,28 +139,31 @@ int main(void)
 	//l = new Light(glm::vec3(world.lightpos), glm::vec3(0.4, 0.2, 0.5));
 	//world.addLight(*l);
 
-	o = new Sphere(glm::vec3(0, 0, -2), 0.5, glm::vec3(0.5, 0.5, 0.95));
+	o = new Sphere(glm::vec3(0.f, 0.f, -2.f), float(0.5), glm::vec3(float(0.5), float(0.5), float(0.95)), glm::vec3(float(0.0), float(0.0), float(0.0)));
 	world.addObject(*o);
 
-	o = new Sphere(glm::vec3(1, 1, -5), 0.5, glm::vec3(0.1, 0.3, 0.1));
+	o = new Sphere(glm::vec3(1, 1, -5), 0.5, glm::vec3(0.1, 0.3, 0.1), glm::vec3(0.0, 0.0, 0.0));
 	world.addObject(*o);
 
-	o = new Sphere(glm::vec3(5, 5, -5), 0.5, glm::vec3(0.7, 0.4, 0.5));
+	o = new Sphere(glm::vec3(5, 5, -5), 0.5, glm::vec3(0.7, 0.4, 0.5), glm::vec3(0.0, 0.0, 0.0));
 	world.addObject(*o);
 
-	o = new Plane(glm::vec3(0.0, 0.0, -1.0), glm::vec3(0.2, 0.2, 0.2), glm::vec3(0.0, 0.0, -20));
+	o = new Sphere(world.lightpos, 0.5, glm::vec3(0.7, 0.4, 0.5), glm::vec3(1.0, 1.0, 1.0));
 	world.addObject(*o);
 
-	o = new Plane(glm::vec3(0.0, -1.0, 0.0), glm::vec3(0.5, 0.5, 0.5), glm::vec3(0.0, -6, 0.0));
+	o = new Plane(glm::vec3(0.0, 0.0, -1.0), glm::vec3(0.2, 0.2, 0.2), glm::vec3(0.0, 0.0, -20), glm::vec3(0.0, 0.0, 0.0));
 	world.addObject(*o);
 
-	o = new Plane(glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.8, 0.0, 0.0), glm::vec3(0.0, 6, 0.0));
+	o = new Plane(glm::vec3(0.0, -1.0, 0.0), glm::vec3(0.5, 0.5, 0.5), glm::vec3(0.0, -6, 0.0), glm::vec3(0.0, 0.0, 0.0));
 	world.addObject(*o);
 
-	o = new Plane(glm::vec3(1.0, 0.0, 0.0), glm::vec3(0.15, 0.8, 0.0), glm::vec3(6, 0.0, 0.0));
+	o = new Plane(glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.8, 0.0, 0.0), glm::vec3(0.0, 6, 0.0), glm::vec3(0.0, 0.0, 0.0));
 	world.addObject(*o);
 
-	o = new Plane(glm::vec3(-1.0, 0.0, 0.0), glm::vec3(0.6, 0.6, 0.2), glm::vec3(-6, 0.0, 0.0));
+	o = new Plane(glm::vec3(1.0, 0.0, 0.0), glm::vec3(0.15, 0.8, 0.0), glm::vec3(6, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0));
+	world.addObject(*o);
+
+	o = new Plane(glm::vec3(-1.0, 0.0, 0.0), glm::vec3(0.6, 0.6, 0.2), glm::vec3(-6, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0));
 	world.addObject(*o);
 
 	Ray ray(world);
