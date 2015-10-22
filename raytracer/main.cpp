@@ -20,7 +20,7 @@
 #define M_PI 3.141592653589793
 #define INFINITY 1e8
 #endif
-const int dimx = 640, dimy = 480;
+const int dimx = 800, dimy = 800;
 
 
 glm::vec3 trace(glm::vec3 &rayorgin, glm::vec3 &raydir, const std::vector<Sphere> &spheres) {
