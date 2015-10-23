@@ -16,7 +16,7 @@ protected:
 	
 
 public:
-	Sphere::Sphere(glm::vec3 pos, float rad, glm::vec3 col);
+	Sphere::Sphere(glm::vec3 pos, float rad, glm::vec3 col, glm::vec3 emcolor);
 	Sphere::~Sphere();
 	float radius;
 	glm::vec3 position;
