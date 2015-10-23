@@ -38,11 +38,13 @@ glm::vec3 Ray::trace(glm::vec3 &rayorgin, glm::vec3 &raydir, std::vector<Object*
 
 	else{
 		// p is the point of intersection
-		// pDir is a normalized vector from p towards light source
+		// pdir is a normalized vector from p towards light source
 		glm::vec3 p = rayorgin + raydir * tnear;
 		glm::vec3 pdir = world.lightpos - p;
 		float dist = glm::length(pdir);
 		pdir = glm::normalize(pdir);
+
+		
 
 		// Look through all objects, if we find an object closer than the light source, shaded = true;
 		for (auto &o : world.objects)
