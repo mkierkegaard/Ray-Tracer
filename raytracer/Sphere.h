@@ -35,6 +35,13 @@ public:
 		return true;
 	}
 
+	glm::vec3 getNormal(const glm::vec3 &p) const{
+
+		glm::vec3 normal = glm::normalize(p - this->position);
+
+		return normal;
+	}
+
 };
 
 #endif

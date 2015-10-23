@@ -25,6 +25,11 @@ public:
 
 		return false;
 	}
+
+	glm::vec3 getNormal(const glm::vec3 &p) const{
+
+		return this->normal;
+	}
 };
 
 #endif
