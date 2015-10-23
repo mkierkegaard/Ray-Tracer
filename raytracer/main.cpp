@@ -180,6 +180,8 @@ int main(void)
 	for (unsigned y = 0; y < dimy; y++) {
 		for (unsigned x = dimx; x > 0; x--, pixel++) {
 
+			cout << "y = " << y << " x = " << x << endl;
+
 			glm::vec3 to = glm::unProject(glm::vec3(x, y, 1), view, projectionMatrix, glm::vec4(0, 0, dimx, dimy));
 			glm::vec3 from = glm::unProject(glm::vec3(x, y, -1), view, projectionMatrix, glm::vec4(0, 0, dimx, dimy));
 

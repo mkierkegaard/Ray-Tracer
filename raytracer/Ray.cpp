@@ -32,15 +32,19 @@ glm::vec3 Ray::trace(glm::vec3 &rayorgin, glm::vec3 &raydir, std::vector<Object*
 			if (t0 < tnear) {
 				tnear = t0;
 				object = objects[i];
+				
 			}
 		}
 	}
-	glm::vec3 retcol = object->color;
-	if (!object) return glm::vec3(0, 0, 0);
-
-	else{
+	
+	if (!object) {
+		cout << "returns black";
+		return glm::vec3(0, 0, 0);
+	}
+	else {
 		// p is the point of intersection
 		// pDir is a normalized vector from p towards light source
+		glm::vec3 retcol(0,0,0);
 		glm::vec3 p = rayorgin + raydir * tnear;
 		glm::vec3 pdir = world.lightpos - p;
 		float dist = glm::length(pdir);
@@ -49,8 +53,10 @@ glm::vec3 Ray::trace(glm::vec3 &rayorgin, glm::vec3 &raydir, std::vector<Object*
 		// Look through all objects, if we find an object closer than the light source, shaded = true;
 		for (auto &o : world.objects)
 		if (o->intersect(p, pdir, t0, t1))
-		if (t0 < dist) return glm::vec3(0.0, 0.0, 0.0);
-
+			if (t0 < dist) {
+				cout << " t0 < dist";
+				return glm::vec3(0.0, 0.0, 0.0);
+			}
 		for (int i = 0; i < world.objects.size(); i++) {
 			glm::vec3 transmission(1.f, 1.f, 1.f);
 			if (world.objects[i]->emissionColor.length() > 0) {
@@ -64,10 +70,12 @@ glm::vec3 Ray::trace(glm::vec3 &rayorgin, glm::vec3 &raydir, std::vector<Object*
 					}
 				}
 				retcol += object->color * transmission * std::max(float(0), glm::dot(pdir, lightdir)) * world.objects[i]->emissionColor;
+				//std::cout << "retcol i = " << i << "color: " << retcol.x << " "<<  retcol.y<< " "<< retcol.z;
 			}
 		}
-
+		//cout << "returns color";
 		// Not shaded => return object's color
 		return retcol + object->emissionColor;
 	}
+	
 }

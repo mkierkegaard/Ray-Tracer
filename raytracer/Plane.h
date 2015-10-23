@@ -23,7 +23,7 @@ public:
 			return (t0 >= 0.0);
 		}
 
-		cout << "Intersects with plane" << endl;
+		//cout << "Intersects with plane" << endl;
 
 		return false;
 	}
