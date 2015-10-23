@@ -186,6 +186,8 @@ int main(void)
 			glm::vec3 origin = from;
 			glm::vec3 direction = glm::normalize(to - from);
 
+			cout << x << "och" << y;
+
 			Ray ray(world);
 
 			*pixel = ray.trace(origin, direction, world.objects);

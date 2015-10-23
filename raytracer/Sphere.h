@@ -32,8 +32,6 @@ public:
 		t0 = tca +- thc;
 		//t1 = tca + thc;
 
-		cout << "Intersects with sphere" << endl;
-
 		return true;
 	}
 
