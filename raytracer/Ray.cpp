@@ -20,8 +20,7 @@ Ray::~Ray()
 glm::vec3 Ray::trace(glm::vec3 &rayorgin, glm::vec3 &raydir, std::vector<Object*> &objects)
 {
 	float tnear = INFINITY;
-	const Object* object = NULL;
-	const Object* light = NULL;
+	Object* object = NULL;
 
 	float t0, t1;
 
@@ -37,17 +36,19 @@ glm::vec3 Ray::trace(glm::vec3 &rayorgin, glm::vec3 &raydir, std::vector<Object*
 			}
 		}
 	}
-	glm::vec3 retcol = object->color;
+
+	glm::vec3 retcol = glm::vec3(0,0,0);
 	if (!object) return glm::vec3(0, 0, 0);
 	
 	else {
 		// p is the point of intersection
 		// pdir is a normalized vector from p towards light source
 		//If != lightsource
-		if (object->emissionColor.length() == 0)
+		if (object->emissionColor.x == 0)
 		{
 			glm::vec3 p = rayorgin + raydir * tnear;
 			glm::vec3 pdir = world.lightpos - p;
+			glm::vec3 pn = object->getNormal(p);
 			float dist = glm::length(pdir);
 			pdir = glm::normalize(pdir);
 
@@ -58,20 +59,26 @@ glm::vec3 Ray::trace(glm::vec3 &rayorgin, glm::vec3 &raydir, std::vector<Object*
 
 			for (int i = 0; i < world.objects.size(); i++) {
 				glm::vec3 transmission(1.f, 1.f, 1.f);
-				if (world.objects[i]->emissionColor.length() > 0) {
+				if (world.objects[i]->emissionColor.x > 0) {
+
+
 					glm::vec3 lightdir = glm::normalize(world.lightpos - p);
 					for (int j = 0; j < world.objects.size(); j++) {
 						if (i != j) {
-							if (world.objects[j]->intersect(p + pdir * glm::vec3(_FBIAS, _FBIAS, _FBIAS), lightdir, t0, t1)) {
+							if (world.objects[j]->intersect(p + pn * glm::vec3(_FBIAS, _FBIAS, _FBIAS), lightdir, t0, t1)) {
+								cout << "Test" << endl;
 								transmission = glm::vec3(0.f, 0.f, 0.f);
 								break;
 							}
 						}
 					}
-					retcol += object->color * transmission * std::max(float(0), glm::dot(pdir, lightdir)) * world.objects[i]->emissionColor;
+					retcol += object->color * transmission * std::max(float(0), glm::dot(pn, lightdir)) * world.objects[i]->emissionColor;
 				}
 			}
 		}
+
+		//cout << "Funkar" << endl;
+		//cout << retcol.x << endl << retcol.y << endl << retcol.z << endl;
 
 		// Not shaded => return object's color
 		return retcol + object->emissionColor;

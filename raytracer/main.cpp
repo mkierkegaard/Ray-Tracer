@@ -186,7 +186,7 @@ int main(void)
 			glm::vec3 origin = from;
 			glm::vec3 direction = glm::normalize(to - from);
 
-			cout << x << "och" << y;
+			//cout << x << " och " << y << endl;
 
 			Ray ray(world);
 
