@@ -37,14 +37,14 @@ glm::vec3 Ray::trace(glm::vec3 &rayorgin, glm::vec3 &raydir, std::vector<Object*
 			}
 		}
 	}
-	glm::vec3 retcol = object->color;
+	glm::vec3 retcol(0,0,0);
 	if (!object) return glm::vec3(0, 0, 0);
 	
 	else {
 		// p is the point of intersection
 		// pdir is a normalized vector from p towards light source
 		//If != lightsource
-		if (object->emissionColor.length() == 0)
+		if (object->emissionColor.x == 0)
 		{
 			glm::vec3 p = rayorgin + raydir * tnear;
 			glm::vec3 pdir = world.lightpos - p;
@@ -74,6 +74,7 @@ glm::vec3 Ray::trace(glm::vec3 &rayorgin, glm::vec3 &raydir, std::vector<Object*
 		}
 
 		// Not shaded => return object's color
+		cout << "retcol: " << retcol.x << endl;
 		return retcol + object->emissionColor;
 	}
 }
