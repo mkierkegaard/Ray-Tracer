@@ -65,9 +65,6 @@ glm::vec3 Ray::trace(glm::vec3 &rayorgin, glm::vec3 &raydir, std::vector<Object*
 		
 		// p is the point of intersection
 		// lightdir is a normalized vector from p towards light source
-
-		
-
 	
 			for (unsigned i = 0; i < objects.size(); i++) {
 				if (objects[i]->emissionColor.x > 0) {
