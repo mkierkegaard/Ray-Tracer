@@ -20,7 +20,8 @@ public:
 
 	void World::addObject(Object& o);
 
-	glm::vec3 lightpos;
+	glm::vec3 lightpos1;
+	glm::vec3 lightpos2;
 
 	//void World::addLight(Light& l);
 };

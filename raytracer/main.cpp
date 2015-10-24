@@ -136,40 +136,47 @@ int main(void)
 	Object* o;
 	//Light* l;
 
-	world.lightpos.x = -1.5;
-	world.lightpos.y = 0.0;
-	world.lightpos.z = -2.0;
+	world.lightpos1.x = 3.f;
+	world.lightpos1.y = 0.f;
+	world.lightpos1.z = -2.f;
+
+	world.lightpos2.x = 2.5f;
+	world.lightpos2.y = -1.f;
+	world.lightpos2.z = -2.5f;
 
 	//l = new Light(glm::vec3(world.lightpos), glm::vec3(0.4, 0.2, 0.5));
 	//world.addLight(*l);
 
-	o = new Sphere(glm::vec3(0, 0, -2), 0.5, glm::vec3(0.5, 0.5, 0.95), glm::vec3(0.0, 0.0, 0.0));
+	o = new Sphere(glm::vec3(0, 0, -3), 0.5, glm::vec3(0.25, 0.25, 0.5), glm::vec3(0.0, 0.0, 0.0));
 	world.addObject(*o);
 
-	o = new Sphere(glm::vec3(1, 1, -3), 0.5, glm::vec3(0.1, 0.3, 0.1), glm::vec3(0.0, 0.0, 0.0));
+	o = new Sphere(glm::vec3(1, 1, -4), 0.5, glm::vec3(0.05, 0.15, 0.05), glm::vec3(0.0, 0.0, 0.0));
 	world.addObject(*o);
 
-	o = new Sphere(glm::vec3(3, 3, -3), 0.5, glm::vec3(0.7, 0.4, 0.5), glm::vec3(0.0, 0.0, 0.0));
+	o = new Sphere(glm::vec3(3, 3, -4), 0.5, glm::vec3(0.35, 0.2, 0.25), glm::vec3(0.0, 0.0, 0.0));
 	world.addObject(*o);
 
-	o = new Sphere(glm::vec3(world.lightpos.x, world.lightpos.y, world.lightpos.z), 0.5, glm::vec3(0.7, 0.4, 0.5), glm::vec3(1.0, 1.0, 1.0));
+	o = new Sphere(glm::vec3(world.lightpos1.x, world.lightpos1.y, world.lightpos1.z), 0.5, glm::vec3(1, 1, 1), glm::vec3(1, 1, 1));
+	world.addObject(*o);
+
+	o = new Sphere(glm::vec3(world.lightpos2.x, world.lightpos2.y, world.lightpos2.z), 0.5, glm::vec3(1, 1, 1), glm::vec3(1, 1, 1));
 	world.addObject(*o);
 	
 	//normal, färg, punkt på planet, emission
 
-	o = new Plane(glm::vec3(0.0, 0.0, 1.0), glm::vec3(0.2, 0.2, 0.2), glm::vec3(0.0, 0.0, -10), glm::vec3(0.0, 0.0, 0.0));
+	o = new Plane(glm::vec3(0.0, 0.0, 1.0), glm::vec3(0.1, 0.1, 0.1), glm::vec3(0.0, 0.0, -10), glm::vec3(0.0, 0.0, 0.0));
 	world.addObject(*o);
 
-	o = new Plane(glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.5, 0.5, 0.5), glm::vec3(0.0, -5, 0.0), glm::vec3(0.0, 0.0, 0.0));
+	o = new Plane(glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.25, 0.25, 0.25), glm::vec3(0.0, -5, 0.0), glm::vec3(0.0, 0.0, 0.0));
 	world.addObject(*o);
 
-	o = new Plane(glm::vec3(0.0, -1.0, 0.0), glm::vec3(0.8, 0.0, 0.0), glm::vec3(0.0, 5, 0.0), glm::vec3(0.0, 0.0, 0.0));
+	o = new Plane(glm::vec3(0.0, -1.0, 0.0), glm::vec3(0.4, 0.0, 0.0), glm::vec3(0.0, 5, 0.0), glm::vec3(0.0, 0.0, 0.0));
 	world.addObject(*o);
 
-	o = new Plane(glm::vec3(-1.0, 0.0, 0.0), glm::vec3(0.15, 0.8, 0.0), glm::vec3(5, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0));
+	o = new Plane(glm::vec3(-1.0, 0.0, 0.0), glm::vec3(0.08, 0.4, 0.0), glm::vec3(5, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0));
 	world.addObject(*o);
 
-	o = new Plane(glm::vec3(1.0, 0.0, 0.0), glm::vec3(0.6, 0.6, 0.2), glm::vec3(-5, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0));
+	o = new Plane(glm::vec3(1.0, 0.0, 0.0), glm::vec3(0.3, 0.3, 0.1), glm::vec3(-5, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0));
 	world.addObject(*o);
 
 	Ray ray(world);
