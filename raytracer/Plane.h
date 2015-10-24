@@ -11,19 +11,20 @@
 class Plane : public Object
 {
 public:
-	Plane(glm::vec3 n, glm::vec3 p, glm::vec3 color, glm::vec3 emcol);
+	Plane(glm::vec3 n, glm::vec3 p, glm::vec3 color, glm::vec3 emcol, glm::vec3 refcol);
 	glm::vec3 normal, point;
 	~Plane();
 
 	bool intersect(const glm::vec3 &rayorigin, const glm::vec3 &raydir, float &t0, float &t1) {
 
-		if ((glm::dot(raydir, - normal)) >= 0.0001)
+	glm::vec3 n = -normal;
+
+		if (glm::dot(raydir, n) >= 0.0001)
 		{
-			t0 = glm::dot((point - rayorigin), normal) / (glm::dot(-normal, raydir));
-			if(t0 > 0)
-				return true;	
+			t0 = glm::dot((point - rayorigin), n) / glm::dot(raydir, n);
+			return (t0 >= 0.0);
 		}
-		//cout << "not!" << endl;
+
 		return false;
 	}
 
