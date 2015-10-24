@@ -52,22 +52,12 @@ glm::vec3 Ray::trace(glm::vec3 &rayorgin, glm::vec3 &raydir, std::vector<Object*
 	glm::vec3 transmission2 = glm::vec3(1.0, 1.0, 1.0);
 
 	
-	if (glm::length(object->reflectanceColor) > 0 && depth < MAX_RAY_DEPTH) {
-		float facingratio = glm::dot(-p, pn);
-		float fresneleffect = mix(pow(1 - facingratio, 3), 1, 0.1);
-		glm::vec3 refldir = glm::normalize(raydir - pn * glm::vec3(2, 2, 2) * glm::dot(raydir, pn));
-		glm::vec3 reflection = trace(p + pn, refldir, objects, depth + 1);
-		
 	
-		retcol = reflection;
-	}
-	else {
+	
 		
 		// p is the point of intersection
 		// lightdir is a normalized vector from p towards light source
-
 		
-
 	
 			for (unsigned i = 0; i < objects.size(); i++) {
 				if (objects[i]->emissionColor.x > 0) {
@@ -91,12 +81,23 @@ glm::vec3 Ray::trace(glm::vec3 &rayorgin, glm::vec3 &raydir, std::vector<Object*
 							}
 						}
 					}
-			
-				retcol += object->color * transmission1 * std::max(float(0), glm::dot(pn, lightdir1)) * world.objects[i]->emissionColor;
-				retcol += object->color * transmission2 * std::max(float(0), glm::dot(pn, lightdir2)) * world.objects[i]->emissionColor;
+					if (glm::length(object->reflectanceColor) > 0 && depth < MAX_RAY_DEPTH) {
+
+
+						float facingratio = glm::dot(-p, pn);
+						float fresneleffect = mix(pow(1 - facingratio, 3), 1, 0.1);
+						glm::vec3 refldir = glm::normalize(raydir - pn * glm::vec3(2, 2, 2) * glm::dot(raydir, pn));
+						glm::vec3 reflection = trace(p + pn, refldir, objects, depth + 1);
+
+
+						retcol += object->reflectanceColor*reflection* transmission1 * std::max(float(0), glm::dot(pn, lightdir1)) * world.objects[i]->emissionColor;
+						retcol += object->reflectanceColor*reflection *transmission2 * std::max(float(0), glm::dot(pn, lightdir2)) * world.objects[i]->emissionColor;
+					}
+				retcol +=  object->color * transmission1 * std::max(float(0), glm::dot(pn, lightdir1)) * world.objects[i]->emissionColor;
+				retcol +=  object->color * transmission2 * std::max(float(0), glm::dot(pn, lightdir2)) * world.objects[i]->emissionColor;
 
 				}
 			}
-			}
+			
 		return retcol + object->emissionColor;
 	}
