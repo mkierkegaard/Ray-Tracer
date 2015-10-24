@@ -17,12 +17,13 @@ public:
 
 	bool intersect(const glm::vec3 &rayorigin, const glm::vec3 &raydir, float &t0, float &t1) {
 
-		if (glm::dot(raydir, normal) >= 0.0001)
+		if ((glm::dot(raydir, - normal)) >= 0.0001)
 		{
-			t0 = glm::dot((point - rayorigin), normal) / glm::dot(raydir, normal);
-			return (t0 >= 0.0);
+			t0 = glm::dot((point - rayorigin), normal) / (glm::dot(-normal, raydir));
+			if(t0 > 0)
+				return true;	
 		}
-
+		//cout << "not!" << endl;
 		return false;
 	}
 

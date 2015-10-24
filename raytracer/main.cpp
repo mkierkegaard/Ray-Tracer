@@ -148,22 +148,22 @@ int main(void)
 	o = new Sphere(glm::vec3(5, 5, -5), 0.5, glm::vec3(0.7, 0.4, 0.5), glm::vec3(0.0, 0.0, 0.0));
 	world.addObject(*o);
 
-	o = new Sphere(glm::vec3(-4, -4, -4.0), 0.3, glm::vec3(0.7, 0.4, 0.3), glm::vec3(1.0, 1.0, 1.0));
+	o = new Sphere(glm::vec3(0.0, 4.0, -2.0), 0.3, glm::vec3(0, 0, 0), glm::vec3(1.0, 1.0, 1.0));
 	world.addObject(*o);
 
-	o = new Plane(glm::vec3(0.0, 0.0, -1.0), glm::vec3(0.2, 0.2, 0.2), glm::vec3(0.0, 0.0, -1), glm::vec3(0.0, 0.0, 0.0));
+	o = new Plane(glm::vec3(0.0, 0.0, 1.0), glm::vec3(0.2, 0.2, 0.2), glm::vec3(0.0, 0.0, -10), glm::vec3(0.0, 0.0, 0.0));
 	world.addObject(*o);
 
-	o = new Plane(glm::vec3(0.0, -1.0, 0.0), glm::vec3(0.5, 0.5, 0.5), glm::vec3(0.0, -1, 0.0), glm::vec3(0.0, 0.0, 0.0));
+	o = new Plane(glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.5, 0.5, 0.5), glm::vec3(0.0, -5, 0.0), glm::vec3(0.0, 0.0, 0.0));
 	world.addObject(*o);
 
-	o = new Plane(glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.8, 0.0, 0.0), glm::vec3(0.0, 1, 0.0), glm::vec3(0.0, 0.0, 0.0));
+	o = new Plane(glm::vec3(0.0, -1.0, 0.0), glm::vec3(0.8, 0.0, 0.0), glm::vec3(0.0, 5, 0.0), glm::vec3(0.0, 0.0, 0.0));
 	world.addObject(*o);
 
-	o = new Plane(glm::vec3(1.0, 0.0, 0.0), glm::vec3(0.15, 0.8, 0.0), glm::vec3(1, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0));
+	o = new Plane(glm::vec3(1.0, 0.0, 0.0), glm::vec3(0.6, 0.6, 0.2), glm::vec3(-5, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0));
 	world.addObject(*o);
 
-	o = new Plane(glm::vec3(-1.0, 0.0, 0.0), glm::vec3(0.6, 0.6, 0.2), glm::vec3(-1, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0));
+	o = new Plane(glm::vec3(-1.0, 0.0, 0.0), glm::vec3(0.6, 0.6, 0.2), glm::vec3(5, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0));
 	world.addObject(*o);
 
 	Ray ray(world);
@@ -180,7 +180,7 @@ int main(void)
 	for (unsigned y = 0; y < dimy; y++) {
 		for (unsigned x = dimx; x > 0; x--, pixel++) {
 
-			cout << "y = " << y << " x = " << x << endl;
+		//	cout << "y = " << y << " x = " << x << endl;
 
 			glm::vec3 to = glm::unProject(glm::vec3(x, y, 1), view, projectionMatrix, glm::vec4(0, 0, dimx, dimy));
 			glm::vec3 from = glm::unProject(glm::vec3(x, y, -1), view, projectionMatrix, glm::vec4(0, 0, dimx, dimy));
