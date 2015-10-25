@@ -98,6 +98,7 @@ glm::vec3 Ray::trace(glm::vec3 &rayorgin, glm::vec3 &raydir, std::vector<Object*
 
 				}
 			}
+
 			
 		return retcol + object->emissionColor;
 	}
