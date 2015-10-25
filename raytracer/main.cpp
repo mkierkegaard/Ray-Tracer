@@ -156,10 +156,10 @@ int main(void)
 	o = new Sphere(glm::vec3(3, 3, -4), 0.5, glm::vec3(0.35, 0.2, 0.25), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0));
 	world.addObject(*o);
 
-	o = new Sphere(glm::vec3(world.lightpos1.x, world.lightpos1.y, world.lightpos1.z), 0.5, glm::vec3(1, 1, 1), glm::vec3(1, 1, 1), glm::vec3(0.0, 0.0, 0.0));
+	o = new Sphere(glm::vec3(world.lightpos1.x, world.lightpos1.y, world.lightpos1.z), 0.5, glm::vec3(0.0, 0.0, 0.0), glm::vec3(1, 1, 1), glm::vec3(0.0, 0.0, 0.0));
 	world.addObject(*o);
 
-	o = new Sphere(glm::vec3(world.lightpos2.x, world.lightpos2.y, world.lightpos2.z), 0.5, glm::vec3(1, 1, 1), glm::vec3(1, 1, 1), glm::vec3(0.0, 0.0, 0.0));
+	o = new Sphere(glm::vec3(world.lightpos2.x, world.lightpos2.y, world.lightpos2.z), 0.5, glm::vec3(0.0, 0.0, 0.0), glm::vec3(1, 1, 1), glm::vec3(0.0, 0.0, 0.0));
 	world.addObject(*o);
 	
 	//normal, färg, punkt på planet, emission
@@ -194,17 +194,24 @@ int main(void)
 		for (unsigned x = dimx; x > 0; x--, pixel++) {
 
 			glm::vec3 color = glm::vec3(0.0, 0.0, 0.0);
-			int samples = 1;
+			int samples = 9;
 
-			glm::vec3 to = glm::unProject(glm::vec3(x, y, 1), view, projectionMatrix, glm::vec4(0, 0, dimx, dimy));
-			glm::vec3 from = glm::unProject(glm::vec3(x, y, -1), view, projectionMatrix, glm::vec4(0, 0, dimx, dimy));
-
-			glm::vec3 origin = from;
-			glm::vec3 direction = glm::normalize(to - from);
 
 			// shoot rays into scene
 			for (int i = 0; i < samples; i++) {
+
+				float randomX = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+				float randomY = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+
+				
+
+				glm::vec3 to = glm::unProject(glm::vec3(x + randomX, y + randomY, 1), view, projectionMatrix, glm::vec4(0, 0, dimx, dimy));
+				glm::vec3 from = glm::unProject(glm::vec3(x + randomX, y + randomY, -1), view, projectionMatrix, glm::vec4(0, 0, dimx, dimy));
+
+				glm::vec3 origin = from;
+				glm::vec3 direction = glm::normalize(to - from);
 				Ray ray(world);
+
 				color += ray.trace(origin, direction, world.objects, 0);
 			}
 
@@ -212,6 +219,7 @@ int main(void)
 			*pixel = color;
 
 		}
+		cout << "y : " << y << endl;;
 	}
 
 	std::ofstream ofs("./untitled.ppm", std::ios::out | std::ios::binary);
