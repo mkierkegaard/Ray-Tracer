@@ -192,7 +192,6 @@ int main(void)
 			glm::vec3 color = glm::vec3(0.0, 0.0, 0.0);
 			int samples = 1;
 
-
 			// shoot rays into scene
 			for (int i = 0; i < samples; i++) {
 
