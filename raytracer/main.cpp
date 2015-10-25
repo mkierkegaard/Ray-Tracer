@@ -179,7 +179,7 @@ int main(void)
 	o = new Plane(glm::vec3(1.0, 0.0, 0.0), glm::vec3(0.15, 0.15, 0.05), glm::vec3(-5, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0));
 	world.addObject(*o);
 
-	Ray ray(world);
+	//Ray ray(world);
 
 	glm::vec3 *image = new glm::vec3[dimx * dimy], *pixel = image;
 
@@ -193,15 +193,23 @@ int main(void)
 	for (unsigned y = 0; y < dimy; y++) {
 		for (unsigned x = dimx; x > 0; x--, pixel++) {
 
+			glm::vec3 color = glm::vec3(0.0, 0.0, 0.0);
+			int samples = 1;
+
 			glm::vec3 to = glm::unProject(glm::vec3(x, y, 1), view, projectionMatrix, glm::vec4(0, 0, dimx, dimy));
 			glm::vec3 from = glm::unProject(glm::vec3(x, y, -1), view, projectionMatrix, glm::vec4(0, 0, dimx, dimy));
 
 			glm::vec3 origin = from;
 			glm::vec3 direction = glm::normalize(to - from);
 
-			Ray ray(world);
+			// shoot rays into scene
+			for (int i = 0; i < samples; i++) {
+				Ray ray(world);
+				color += ray.trace(origin, direction, world.objects, 0);
+			}
 
-			*pixel = ray.trace(origin, direction, world.objects, 0);
+			color /= samples;
+			*pixel = color;
 
 		}
 	}
