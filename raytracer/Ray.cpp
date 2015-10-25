@@ -53,8 +53,7 @@ glm::vec3 Ray::trace(glm::vec3 &rayorgin, glm::vec3 &raydir, std::vector<Object*
 	glm::vec3 lightdir2 = glm::normalize(world.lightpos2 - p);
 	glm::vec3 transmission1 = glm::vec3(1.0, 1.0, 1.0);
 	glm::vec3 transmission2 = glm::vec3(1.0, 1.0, 1.0);
-		
-	
+
 			for (unsigned i = 0; i < objects.size(); i++) {
 				if (objects[i]->emissionColor.x > 0) {
 				transmission1 = glm::vec3(1.0, 1.0, 1.0);
@@ -93,6 +92,7 @@ glm::vec3 Ray::trace(glm::vec3 &rayorgin, glm::vec3 &raydir, std::vector<Object*
 
 				}
 			}
+
 			
 		return retcol + object->emissionColor;
 	}
