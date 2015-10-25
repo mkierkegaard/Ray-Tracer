@@ -22,11 +22,6 @@ float mix(const float &a, const float &b, const float &mix)
 	return b * mix + a * (1 - mix);
 }
 
-float pdf(const float &x)
-{
-	return 1 / sqrtf(2 * M_PI) * exp(-x * x * 0.5);
-}
-
 glm::vec3 Ray::trace(glm::vec3 &rayorgin, glm::vec3 &raydir, std::vector<Object*> &objects, const int &depth)
 {
 	float tnear = INFINITY;
@@ -58,7 +53,7 @@ glm::vec3 Ray::trace(glm::vec3 &rayorgin, glm::vec3 &raydir, std::vector<Object*
 	glm::vec3 lightdir2 = glm::normalize(world.lightpos2 - p);
 	glm::vec3 transmission1 = glm::vec3(1.0, 1.0, 1.0);
 	glm::vec3 transmission2 = glm::vec3(1.0, 1.0, 1.0);
-
+	
 			for (unsigned i = 0; i < objects.size(); i++) {
 				if (objects[i]->emissionColor.x > 0) {
 				transmission1 = glm::vec3(1.0, 1.0, 1.0);
@@ -86,7 +81,8 @@ glm::vec3 Ray::trace(glm::vec3 &rayorgin, glm::vec3 &raydir, std::vector<Object*
 						float facingratio = glm::dot(-p, pn);
 						float fresneleffect = mix(pow(1 - facingratio, 3), 1, 0.1);
 						glm::vec3 refldir = glm::normalize(raydir - pn * glm::vec3(2, 2, 2) * glm::dot(raydir, pn));
-						glm::vec3 reflection = trace(p + pn, refldir, objects, depth + 1);
+						Ray ray(world);
+						glm::vec3 reflection = ray.trace(p + pn, refldir, objects, depth + 1);
 
 						retcol += object->reflectanceColor*reflection* transmission1 * std::max(float(0), glm::dot(pn, lightdir1)) * world.objects[i]->emissionColor;
 						retcol += object->reflectanceColor*reflection *transmission2 * std::max(float(0), glm::dot(pn, lightdir2)) * world.objects[i]->emissionColor;
@@ -97,7 +93,6 @@ glm::vec3 Ray::trace(glm::vec3 &rayorgin, glm::vec3 &raydir, std::vector<Object*
 
 				}
 			}
-
 			
 		return retcol + object->emissionColor;
 	}

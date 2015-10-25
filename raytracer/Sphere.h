@@ -1,6 +1,8 @@
 #ifndef SPHERE_H
 #define SPHERE_H
-
+#define _USE_MATH_DEFINES
+#include <cmath>
+#include <algorithm>
 #include <stdlib.h>
 #include <stdio.h>
 #include <glm/vec3.hpp>

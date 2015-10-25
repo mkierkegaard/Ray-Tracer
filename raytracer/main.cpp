@@ -190,7 +190,7 @@ int main(void)
 		for (unsigned x = dimx; x > 0; x--, pixel++) {
 
 			glm::vec3 color = glm::vec3(0.0, 0.0, 0.0);
-			int samples = 9;
+			int samples = 1;
 
 
 			// shoot rays into scene
