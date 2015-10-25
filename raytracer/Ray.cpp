@@ -22,6 +22,11 @@ float mix(const float &a, const float &b, const float &mix)
 	return b * mix + a * (1 - mix);
 }
 
+float pdf(const float &x)
+{
+	return 1 / sqrtf(2 * M_PI) * exp(-x * x * 0.5);
+}
+
 glm::vec3 Ray::trace(glm::vec3 &rayorgin, glm::vec3 &raydir, std::vector<Object*> &objects, const int &depth)
 {
 	float tnear = INFINITY;
