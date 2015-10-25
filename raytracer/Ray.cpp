@@ -49,8 +49,6 @@ glm::vec3 Ray::trace(glm::vec3 &rayorgin, glm::vec3 &raydir, std::vector<Object*
 	glm::vec3 p = rayorgin + raydir * tnear;
 	glm::vec3 pn = object->getNormal(p);
 	pn = glm::normalize(pn);
-	float u = (float)rand() / RAND_MAX;
-	float v = (float)rand() / RAND_MAX;
 	glm::vec3 lightdir1 = glm::normalize(world.lightpos1 - p);
 	glm::vec3 lightdir2 = glm::normalize(world.lightpos2 - p);
 	glm::vec3 transmission1 = glm::vec3(1.0, 1.0, 1.0);
