@@ -161,8 +161,6 @@ int main(void)
 
 	o = new Sphere(glm::vec3(world.lightpos2.x, world.lightpos2.y, world.lightpos2.z), 0.5, glm::vec3(1, 1, 1), glm::vec3(1, 1, 1), glm::vec3(0.0, 0.0, 0.0));
 	world.addObject(*o);
-	
-	//normal, färg, punkt på planet, emission
 
 	o = new Plane(glm::vec3(0.0, 0.0, 1.0), glm::vec3(0.1, 0.1, 0.1), glm::vec3(0.0, 0.0, -10), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0));
 	world.addObject(*o);
@@ -179,8 +177,6 @@ int main(void)
 	o = new Plane(glm::vec3(1.0, 0.0, 0.0), glm::vec3(0.15, 0.15, 0.05), glm::vec3(-5, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0));
 	world.addObject(*o);
 
-	//Ray ray(world);
-
 	glm::vec3 *image = new glm::vec3[dimx * dimy], *pixel = image;
 
 	glm::mat4 projectionMatrix = glm::perspective(float(30), float(dimx) / float(dimy), float(0.1), 100.f);
@@ -194,16 +190,16 @@ int main(void)
 		for (unsigned x = dimx; x > 0; x--, pixel++) {
 
 			glm::vec3 color = glm::vec3(0.0, 0.0, 0.0);
-			int samples = 1;
-
-			glm::vec3 to = glm::unProject(glm::vec3(x, y, 1), view, projectionMatrix, glm::vec4(0, 0, dimx, dimy));
-			glm::vec3 from = glm::unProject(glm::vec3(x, y, -1), view, projectionMatrix, glm::vec4(0, 0, dimx, dimy));
-
-			glm::vec3 origin = from;
-			glm::vec3 direction = glm::normalize(to - from);
+			int samples = 30;
 
 			// shoot rays into scene
 			for (int i = 0; i < samples; i++) {
+				float u = (float)rand() / RAND_MAX;
+				float v = (float)rand() / RAND_MAX;
+				glm::vec3 to = glm::unProject(glm::vec3(x+u, y+v, 1), view, projectionMatrix, glm::vec4(0, 0, dimx, dimy));
+				glm::vec3 from = glm::unProject(glm::vec3(x+u, y+v, -1), view, projectionMatrix, glm::vec4(0, 0, dimx, dimy));
+				glm::vec3 origin = from;
+				glm::vec3 direction = glm::normalize(to - from);
 				Ray ray(world);
 				color += ray.trace(origin, direction, world.objects, 0);
 			}
