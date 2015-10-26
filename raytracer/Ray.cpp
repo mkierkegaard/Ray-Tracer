@@ -99,7 +99,8 @@ glm::vec3 Ray::trace(glm::vec3 &rayorgin, glm::vec3 &raydir, std::vector<Object*
 				}
 			}
 			//indirect light
-			if (depth < 3) {
+			float absorbtion = 0.5;
+			if (depth < 3 && absorbtion < static_cast <float> (rand()) / static_cast <float> (RAND_MAX)) {
 				int numrays = 10;
 				for (int i = 0; i < numrays; i++) {
 					float randx = (static_cast <float> (rand()) / static_cast <float> (RAND_MAX)) * 2 - 1;
@@ -109,9 +110,10 @@ glm::vec3 Ray::trace(glm::vec3 &rayorgin, glm::vec3 &raydir, std::vector<Object*
 					randdir = glm::normalize(randdir);
 					Ray ray(world);
 					glm::vec3 tracedcol = ray.trace(p, randdir, objects, depth + 1);
+					float pdf = 1 / (2 * M_PI);
 					//cout << tracedcol.x / 50 << endl;
 					if (glm::length(tracedcol) > 0)
-						retcol += glm::vec3(tracedcol.x * 0.02, tracedcol.y *0.02, tracedcol.z * 0.02);
+						retcol += glm::vec3(tracedcol.x * 0.02 / (1 - absorbtion) * pdf, tracedcol.y *0.02/ (1 - absorbtion)*pdf, tracedcol.z * 0.02/ (1 - absorbtion) *pdf);
 				}
 			}
 
