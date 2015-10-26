@@ -22,6 +22,14 @@ float mix(const float &a, const float &b, const float &mix)
 	return b * mix + a * (1 - mix);
 }
 
+float brdf(glm::vec3 in, glm::vec3 out, glm::vec3 normal) {
+
+	float brdf;
+	brdf = std::max(float(0), glm::dot(normal, out));
+	
+	return brdf;
+}
+
 glm::vec3 calcOffset() {
 
 	//bad random generator? should use modern method?
@@ -110,31 +118,34 @@ glm::vec3 Ray::trace(glm::vec3 &rayorgin, glm::vec3 &raydir, std::vector<Object*
 						glm::vec3 refldir = glm::normalize(raydir - pn * glm::vec3(2, 2, 2) * glm::dot(raydir, pn));
 						glm::vec3 reflection = trace(p + pn, refldir, objects, depth + 1);
 
-						retcol += object->reflectanceColor*reflection* transmission1 * std::max(float(0), glm::dot(pn, lightdir1)) * world.objects[i]->emissionColor;
-						retcol += object->reflectanceColor*reflection *transmission2 * std::max(float(0), glm::dot(pn, lightdir2)) * world.objects[i]->emissionColor;
+						retcol += object->reflectanceColor*reflection* transmission1 * brdf(raydir, lightdir1, pn) * world.objects[i]->emissionColor;
+						retcol += object->reflectanceColor*reflection *transmission2 * brdf(raydir, lightdir2, pn) * world.objects[i]->emissionColor;
 					}
-
-				retcol +=  object->color * transmission1 * std::max(float(0), glm::dot(pn, lightdir1)) * world.objects[i]->emissionColor;
-				retcol +=  object->color * transmission2 * std::max(float(0), glm::dot(pn, lightdir2)) * world.objects[i]->emissionColor;
+					
+				retcol +=  object->color * transmission1 * brdf(raydir, lightdir1, pn) * world.objects[i]->emissionColor;
+				retcol +=  object->color * transmission2 * brdf(raydir, lightdir2, pn) * world.objects[i]->emissionColor;
 
 				}
 			}
 			//indirect light
 			float absorbtion = 0.5;
 			if (depth < 3 && absorbtion < static_cast <float> (rand()) / static_cast <float> (RAND_MAX)) {
-				int numrays = 10;
+				int numrays = 2;
 				for (int i = 0; i < numrays; i++) {
 					float randx = (static_cast <float> (rand()) / static_cast <float> (RAND_MAX)) * 2 - 1;
 					float randy = (static_cast <float> (rand()) / static_cast <float> (RAND_MAX)) * 2 - 1;
 					float randz = (static_cast <float> (rand()) / static_cast <float> (RAND_MAX)) * 2 - 1;
+
 					glm::vec3 randdir(randx, randy, randz);
 					randdir = glm::normalize(randdir);
 					Ray ray(world);
 					glm::vec3 tracedcol = ray.trace(p, randdir, objects, depth + 1);
 					float pdf = 1 / (2 * M_PI);
-					//cout << tracedcol.x / 50 << endl;
+					float randbrdf = brdf(raydir, randdir, pn);
+					float newRayCos = std::max(0.0f, glm::dot(object->getNormal(p), randdir));
+					
 					if (glm::length(tracedcol) > 0)
-						retcol += glm::vec3(tracedcol.x * 0.02 / (1 - absorbtion) * pdf, tracedcol.y *0.02/ (1 - absorbtion)*pdf, tracedcol.z * 0.02/ (1 - absorbtion) *pdf);
+						retcol += randbrdf* newRayCos*glm::vec3(tracedcol.x / (1 - absorbtion) * pdf, tracedcol.y / (1 - absorbtion)*pdf, tracedcol.z / (1 - absorbtion) *pdf);
 				}
 			}
 

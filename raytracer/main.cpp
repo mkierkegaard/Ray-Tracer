@@ -190,12 +190,12 @@ int main(void)
 	glm::mat4 viewprojectioninv = glm::inverse(viewprojection);
 
 	
-	#pragma omp for num_threads(4)
+	#pragma omp for num_threads(2)
 	for (unsigned y = 0; y < dimy; y++) {
 		for (unsigned x = dimx; x > 0; x--, pixel++) {
 
 			glm::vec3 color = glm::vec3(0.0, 0.0, 0.0);
-			int samples = 4;
+			int samples = 2;
 
 
 			// shoot rays into scene
