@@ -22,9 +22,24 @@ float mix(const float &a, const float &b, const float &mix)
 	return b * mix + a * (1 - mix);
 }
 
-float pdf(const float &x)
-{
-	return 1 / sqrtf(2 * M_PI) * exp(-x * x * 0.5);
+glm::vec3 calcOffset() {
+
+	//bad random generator? should use modern method?
+	float u = (float)rand() / RAND_MAX;
+	float v = (float)rand() / RAND_MAX;
+
+	//evenly distributed
+	float theta = 2 * M_PI*u;
+	float cosphi = 2 * v - 1;
+	float phi = acos(cosphi);
+
+	float x = 0.5 * cos(theta) * sin(phi);
+	float y = 0.5 * sin(theta) * sin(phi);
+	float z = 0.5 * cosphi;
+
+	glm::vec3 offset = glm::vec3(x, y, z);
+
+	return offset;
 }
 
 glm::vec3 Ray::trace(glm::vec3 &rayorgin, glm::vec3 &raydir, std::vector<Object*> &objects, const int &depth)
@@ -54,12 +69,18 @@ glm::vec3 Ray::trace(glm::vec3 &rayorgin, glm::vec3 &raydir, std::vector<Object*
 	glm::vec3 p = rayorgin + raydir * tnear;
 	glm::vec3 pn = object->getNormal(p);
 	pn = glm::normalize(pn);
+
+	glm::vec3 offset1 = calcOffset();
+	glm::vec3 offset2 = calcOffset();
+
+	world.lightpos1 += offset1;
+	world.lightpos2 += offset2;
+
 	glm::vec3 lightdir1 = glm::normalize(world.lightpos1 - p);
 	glm::vec3 lightdir2 = glm::normalize(world.lightpos2 - p);
 	glm::vec3 transmission1 = glm::vec3(1.0, 1.0, 1.0);
 	glm::vec3 transmission2 = glm::vec3(1.0, 1.0, 1.0);
 		
-	
 			for (unsigned i = 0; i < objects.size(); i++) {
 				if (objects[i]->emissionColor.x > 0) {
 				transmission1 = glm::vec3(1.0, 1.0, 1.0);

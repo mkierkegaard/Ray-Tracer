@@ -1,13 +1,15 @@
-#include <stdlib.h>
-#include <stdio.h>
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <algorithm>
+#include <stdlib.h>
+#include <stdio.h>
 #include <glm/vec3.hpp>
+#include <glm/glm.hpp>
 #include "World.h"
+#include <cmath>
+
 
 #define MAX_RAY_DEPTH 5
-
 
 class Ray
 {

@@ -195,7 +195,7 @@ int main(void)
 		for (unsigned x = dimx; x > 0; x--, pixel++) {
 
 			glm::vec3 color = glm::vec3(0.0, 0.0, 0.0);
-			int samples = 1;
+			int samples = 4;
 
 
 			// shoot rays into scene
@@ -203,8 +203,6 @@ int main(void)
 
 				float randomX = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 				float randomY = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-
-				
 
 				glm::vec3 to = glm::unProject(glm::vec3(x + randomX, y + randomY, 1), view, projectionMatrix, glm::vec4(0, 0, dimx, dimy));
 				glm::vec3 from = glm::unProject(glm::vec3(x + randomX, y + randomY, -1), view, projectionMatrix, glm::vec4(0, 0, dimx, dimy));
