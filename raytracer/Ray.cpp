@@ -26,7 +26,7 @@ float brdf(glm::vec3 in, glm::vec3 out, glm::vec3 normal) {
 
 	float brdf;
 	brdf = std::max(float(0), glm::dot(normal, out));
-	
+
 	return brdf;
 }
 
@@ -54,7 +54,6 @@ glm::vec3 Ray::trace(glm::vec3 &rayorgin, glm::vec3 &raydir, std::vector<Object*
 {
 	float tnear = INFINITY;
 	const Object* object = NULL;
-
 	float t0, t1;
 
 	for (unsigned i = 0; i < objects.size(); i++) {
@@ -88,9 +87,72 @@ glm::vec3 Ray::trace(glm::vec3 &rayorgin, glm::vec3 &raydir, std::vector<Object*
 	glm::vec3 lightdir2 = glm::normalize(world.lightpos2 - p);
 	glm::vec3 transmission1 = glm::vec3(1.0, 1.0, 1.0);
 	glm::vec3 transmission2 = glm::vec3(1.0, 1.0, 1.0);
+
+	if ((glm::length(object->reflectanceColor) > 0.f || object->transparancy > 0.f) && depth < MAX_RAY_DEPTH) {
 		
-			for (unsigned i = 0; i < objects.size(); i++) {
-				if (objects[i]->emissionColor.x > 0) {
+		float facingratio = glm::dot(-raydir, pn);
+		glm::vec3 fresneleffect(mix(pow(1.f - facingratio, 3.f), 1.f, 0.1f), mix(pow(1.f - facingratio, 3.f), 1.f, 0.1f), mix(pow(1.f - facingratio, 3.f), 1.f, 0.1f));
+		glm::vec3 refldir = glm::normalize(raydir - pn * glm::vec3(2.f, 2.f, 2.f) * glm::dot(raydir, pn));
+		glm::vec3 reflection = trace(p, refldir, objects, depth + 1);
+		glm::vec3 refraction(0.0f, 0.0f, 0.0f);
+
+		if (object->transparancy > 0.f) {
+			glm::vec3 incident = raydir;
+			float n1, n2;
+			n1 = 1.0f;
+			n2 = 1.4f;
+			float r = n1 / n2;
+		
+			float cosTheta1 = glm::dot(raydir, -pn);
+			float cosTheta2 = sqrt(1.f - r*r*(1.f - cosTheta1*cosTheta1));
+
+			glm::vec3 refractiondir = (r*raydir + (float)(r*cosTheta1 - cosTheta2)*pn);
+
+			glm::vec3 pOut = p + (refractiondir * 2.f * glm::dot(refractiondir, object->point - p));
+			glm::vec3 normOut = object->getNormal(pOut);
+
+			r = n2 / n1;
+
+			float cosTheta1out = glm::dot(refractiondir, -normOut);
+			float cosTheta2out = sqrt(1.f - r*r*(1.f - cosTheta1out*cosTheta1out));
+
+			glm::vec3 refrdirOut = glm::normalize((r*raydir + (r*cosTheta1out - cosTheta2out)*normOut));
+			
+			float R0 = pow((n1 - n2) / (n1 + n2), 2);
+			float refCof = R0 + (1.f - R0)* pow(1.f - cosTheta1, 5);
+			
+			refraction = trace(pOut, refrdirOut, objects, depth + 1);
+
+			if ((float)rand() / RAND_MAX  < refCof ) {
+				
+				retcol += refraction;
+				
+			}		
+			else {
+				
+				//cout << (reflection* object->reflectanceColor * brdf(p, lightdir1, pn)).x << endl;
+				retcol += (reflection* object->reflectanceColor * brdf(p, lightdir1, pn));
+				retcol += (reflection* object->reflectanceColor * brdf(p, lightdir2, pn));
+			}
+		}
+		else {
+
+			retcol += (reflection* object->reflectanceColor * brdf(p, lightdir1, pn));
+			retcol += (reflection* object->reflectanceColor * brdf(p, lightdir2, pn));
+		}
+		//cout << "refraction : " << refraction.x << endl;
+		
+		
+		
+		
+
+		//retcol += (refraction* object->transparancy + object->reflectanceColor * reflection )* object->color;
+		//retcol += (refraction* object->transparancy + object->reflectanceColor * reflection )* object->color;
+	}
+
+	else {
+		for (unsigned i = 0; i < objects.size(); i++) {
+			if (objects[i]->emissionColor.x > 0) {
 				transmission1 = glm::vec3(1.0, 1.0, 1.0);
 				transmission2 = glm::vec3(1.0, 1.0, 1.0);
 				for (unsigned j = 0; j < objects.size(); j++) {
@@ -102,52 +164,51 @@ glm::vec3 Ray::trace(glm::vec3 &rayorgin, glm::vec3 &raydir, std::vector<Object*
 							}
 						}
 						if (objects[j]->intersect(p, lightdir2, t0, t1)) {
-
 							if (t0 < length(world.lightpos2 - p))
 							{
 								transmission2 = glm::vec3(0.0, 0.0, 0.0);
 							}
-
 						}
 					}
 				}
-					if (glm::length(object->reflectanceColor) > 0 && depth < MAX_RAY_DEPTH) {
-
-						float facingratio = glm::dot(-p, pn);
-						float fresneleffect = mix(pow(1 - facingratio, 3), 1, 0.1);
-						glm::vec3 refldir = glm::normalize(raydir - pn * glm::vec3(2, 2, 2) * glm::dot(raydir, pn));
-						glm::vec3 reflection = trace(p + pn, refldir, objects, depth + 1);
-
-						retcol += object->reflectanceColor*reflection* transmission1 * brdf(raydir, lightdir1, pn) * world.objects[i]->emissionColor;
-						retcol += object->reflectanceColor*reflection *transmission2 * brdf(raydir, lightdir2, pn) * world.objects[i]->emissionColor;
-					}
-					
-				retcol +=  object->color * transmission1 * brdf(raydir, lightdir1, pn) * world.objects[i]->emissionColor;
-				retcol +=  object->color * transmission2 * brdf(raydir, lightdir2, pn) * world.objects[i]->emissionColor;
-
-				}
 			}
-			//indirect light
-			float absorbtion = 0.5;
-			if (depth < 3 && absorbtion < static_cast <float> (rand()) / static_cast <float> (RAND_MAX)) {
-				int numrays = 2;
-				for (int i = 0; i < numrays; i++) {
-					float randx = (static_cast <float> (rand()) / static_cast <float> (RAND_MAX)) * 2 - 1;
-					float randy = (static_cast <float> (rand()) / static_cast <float> (RAND_MAX)) * 2 - 1;
-					float randz = (static_cast <float> (rand()) / static_cast <float> (RAND_MAX)) * 2 - 1;
-
-					glm::vec3 randdir(randx, randy, randz);
-					randdir = glm::normalize(randdir);
-					Ray ray(world);
-					glm::vec3 tracedcol = ray.trace(p, randdir, objects, depth + 1);
-					float pdf = 1 / (2 * M_PI);
-					float randbrdf = brdf(raydir, randdir, pn);
-					float newRayCos = std::max(0.0f, glm::dot(object->getNormal(p), randdir));
-					
-					if (glm::length(tracedcol) > 0)
-						retcol += randbrdf* newRayCos*glm::vec3(tracedcol.x / (1 - absorbtion) * pdf, tracedcol.y / (1 - absorbtion)*pdf, tracedcol.z / (1 - absorbtion) *pdf);
-				}
-			}
-
-		return retcol + object->emissionColor;
+			retcol += object->color * transmission1 * brdf(raydir, lightdir1, pn) * world.objects[i]->emissionColor;
+			retcol += object->color * transmission2 * brdf(raydir, lightdir2, pn) * world.objects[i]->emissionColor;
+		}
 	}
+	//indirect light
+	float absorbtion = 0.5;
+	
+	if (depth < 3 && absorbtion < static_cast <float> (rand()) / static_cast <float> (RAND_MAX)) {
+		int numrays = 10;
+		for (int i = 0; i < numrays; i++) {
+
+			float u = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+			float v = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+
+			float x = cos(2 * M_PI * u);
+			float y = sin(2 * M_PI * u);
+			float z = v;
+
+			glm::vec3 randdir(x, y, z);
+
+			glm::vec3 sw = pn;
+			glm::vec3 su = glm::normalize(glm::cross((glm::abs(sw.x) > 0.1 ? glm::vec3(0, 1, 0) : glm::vec3(1, 0, 0)), sw));
+			glm::vec3 sv = glm::cross(sw, su);
+
+			glm::mat3 rot = glm::mat3(sv, sw, su);
+
+			randdir = glm::normalize(randdir) * rot;
+			//Ray ray(world);
+			glm::vec3 tracedcol = trace(p, randdir, objects, depth + 1);
+			float pdf = 1 / (2 * M_PI);
+			float randbrdf = brdf(raydir, randdir, pn);
+			//float newRayCos = std::max(0.0f, glm::dot(object->getNormal(p), randdir));
+
+			if (glm::length(tracedcol) > 0)
+				retcol += randbrdf *(1.f/absorbtion)* pdf* tracedcol;
+		}
+	}
+
+	return retcol + object->emissionColor;
+}

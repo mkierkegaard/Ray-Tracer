@@ -147,36 +147,36 @@ int main(void)
 	//l = new Light(glm::vec3(world.lightpos), glm::vec3(0.4, 0.2, 0.5));
 	//world.addLight(*l);
 
-	o = new Sphere(glm::vec3(2, -4, -5), 1.5, glm::vec3(0.0, 0.0, 0.2), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.1, 0.1, 0.1));
+	o = new Sphere(glm::vec3(2, 0, -6), 1.5, glm::vec3(0.2, 0.2, 0.9), glm::vec3(0.0, 0.0, 0.0), glm::vec3(1.0, 1.0, 1.0), 0.f);
+	world.addObject(*o);
+	
+	o = new Sphere(glm::vec3(-3, -3, -6), 1.5, glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.2, 0.2, 0.2), 1.f);
 	world.addObject(*o);
 
-	o = new Sphere(glm::vec3(-3, -3.5, -6), 1, glm::vec3(0.05, 0.15, 0.05), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0));
+	o = new Sphere(glm::vec3(4.5, 3, -6), 0.5, glm::vec3(0.35, 0.2, 0.25), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), 0);
 	world.addObject(*o);
 
-	o = new Sphere(glm::vec3(4.5, 3, -6), 0.5, glm::vec3(0.35, 0.2, 0.25), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0));
+	o = new Sphere(glm::vec3(world.lightpos1.x, world.lightpos1.y, world.lightpos1.z), 0.5, glm::vec3(0.0, 0.0, 0.0), glm::vec3(1.0, 1.0, 1.0), glm::vec3(0.0, 0.0, 0.0), 0);
 	world.addObject(*o);
 
-	o = new Sphere(glm::vec3(world.lightpos1.x, world.lightpos1.y, world.lightpos1.z), 0.5, glm::vec3(0.0, 0.0, 0.0), glm::vec3(1.0, 1.0, 1.0), glm::vec3(0.0, 0.0, 0.0));
-	world.addObject(*o);
-
-	o = new Sphere(glm::vec3(world.lightpos2.x, world.lightpos2.y, world.lightpos2.z), 0.5, glm::vec3(0.0, 0.0, 0.0), glm::vec3(1.0, 1.0, 1.0), glm::vec3(0.0, 0.0, 0.0));
+	o = new Sphere(glm::vec3(world.lightpos2.x, world.lightpos2.y, world.lightpos2.z), 0.5, glm::vec3(0.0, 0.0, 0.0), glm::vec3(1.0, 1.0, 1.0), glm::vec3(0.0, 0.0, 0.0), 0);
 	world.addObject(*o);
 	
 	//normal, färg, punkt på planet, emission
 
-	o = new Plane(glm::vec3(0.0, 0.0, 1.0), glm::vec3(0.1, 0.1, 0.1), glm::vec3(0.0, 0.0, -10), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0));
+	o = new Plane(glm::vec3(0.0, 0.0, 1.0), glm::vec3(0.1, 0.1, 0.1), glm::vec3(0.0, 0.0, -10), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), 0);
 	world.addObject(*o);
 
-	o = new Plane(glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.25, 0.25, 0.25), glm::vec3(0.0, -5, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0));
+	o = new Plane(glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.05, 0.05, 0.05), glm::vec3(0.0, -5, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), 0);
 	world.addObject(*o);
 
-	o = new Plane(glm::vec3(0.0, -1.0, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 5, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0));
+	o = new Plane(glm::vec3(0.0, -1.0, 0.0), glm::vec3(0.05, 0.15, 0.05), glm::vec3(0.0, 5, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), 0);
 	world.addObject(*o);
 
-	o = new Plane(glm::vec3(-1.0, 0.0, 0.0), glm::vec3(0.08, 0.2, 0.0), glm::vec3(5, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0));
+	o = new Plane(glm::vec3(-1.0, 0.0, 0.0), glm::vec3(0.15, 0.05, 0.05), glm::vec3(5, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), 0);
 	world.addObject(*o);
 
-	o = new Plane(glm::vec3(1.0, 0.0, 0.0), glm::vec3(0.15, 0.15, 0.05), glm::vec3(-5, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0));
+	o = new Plane(glm::vec3(1.0, 0.0, 0.0), glm::vec3(0.05, 0.05, 0.15), glm::vec3(-5, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), 0);
 	world.addObject(*o);
 
 	//Ray ray(world);
@@ -190,12 +190,12 @@ int main(void)
 	glm::mat4 viewprojectioninv = glm::inverse(viewprojection);
 
 	
-	#pragma omp for num_threads(2)
-	for (unsigned y = 0; y < dimy; y++) {
-		for (unsigned x = dimx; x > 0; x--, pixel++) {
+	#pragma omp parallel for
+	for (int y = 0; y < dimy; y++) {
+		for (unsigned x = 0; x < dimx; x++) {
 
 			glm::vec3 color = glm::vec3(0.0, 0.0, 0.0);
-			int samples = 2;
+			int samples = 9;
 
 
 			// shoot rays into scene
@@ -203,9 +203,9 @@ int main(void)
 
 				float randomX = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 				float randomY = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-
-				glm::vec3 to = glm::unProject(glm::vec3(x + randomX, y + randomY, 1), view, projectionMatrix, glm::vec4(0, 0, dimx, dimy));
-				glm::vec3 from = glm::unProject(glm::vec3(x + randomX, y + randomY, -1), view, projectionMatrix, glm::vec4(0, 0, dimx, dimy));
+				
+				glm::vec3 to = glm::unProject(glm::vec3(x + randomX, (float)y + randomY, 1), view, projectionMatrix, glm::vec4(0, 0, dimx, dimy));
+				glm::vec3 from = glm::unProject(glm::vec3(x + randomX, (float)y + randomY, -1), view, projectionMatrix, glm::vec4(0, 0, dimx, dimy));
 
 				glm::vec3 origin = from;
 				glm::vec3 direction = glm::normalize(to - from);
@@ -215,10 +215,10 @@ int main(void)
 			}
 
 			color /= samples;
-			*pixel = color;
+			pixel[y*dimx + x] = color;
 
 		}
-		cout << "y : " << y << endl;;
+		//cout << "y : " << y << endl;;
 	}
 
 	std::ofstream ofs("./untitled.ppm", std::ios::out | std::ios::binary);
